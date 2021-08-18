@@ -55,9 +55,9 @@ public class FoodTruck {
 		this.expirationDate = expirationDate;
 		this.location = location;
 	}
-	
+
 	public FoodTruck() {
-		
+
 	}
 
 	public String getLocationId() {
@@ -254,7 +254,8 @@ public class FoodTruck {
 
 	@Override
 	public String toString() {
-		return String.format("FoodTruck \nlocationId: %s, ", this.locationId);
+		return String.format("FoodTruck \nLocationId: %s \nBlock: %s \nAddress: %s", this.locationId, this.block,
+				this.address);
 	}
 
 }

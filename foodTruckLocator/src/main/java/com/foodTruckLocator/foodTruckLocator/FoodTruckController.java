@@ -9,10 +9,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -22,24 +25,40 @@ public class FoodTruckController {
 	private Map<String, FoodTruck> foodTrucksMap = intializeFoodTrucks();
 	private Map<String, List<FoodTruck>> foodTrucksByBlockMap = intializeFoodTrucksByBlock(foodTrucksMap);
 
+	private static final Logger log = LoggerFactory.getLogger(FoodTruckController.class);
+
 	@GetMapping(value = { "/getFoodTruck/{locationId}", "/getFoodTruck" })
 	public FoodTruck getFoodTruck(@PathVariable(required = false) String locationId) {
-		System.out.println(String.format("Attempting to get foodtruck with locationId: %s", locationId));
+		log.info(String.format("Attempting to get foodtruck with locationId: %s", locationId));
 		return foodTrucksMap.getOrDefault(locationId, null);
 	}
 
 	@GetMapping(value = { "/getFoodTrucksByBlock/{block}", "/getFoodTrucksByBlock" })
 	public List<FoodTruck> getFoodTrucksByBlock(@PathVariable(required = false) String block) {
-		System.out.println(String.format("Attempting to get foodtruck with block: %s", block));
+		log.info(String.format("Attempting to get foodtruck with block: %s", block));
 		return foodTrucksByBlockMap.getOrDefault(block == null || block.isEmpty() ? "EMPTY" : block, new ArrayList<>());
 	}
 
-//	@PostMapping("insertFoodTruck")
-//	public void insertFoodTruck(FoodTruck ft) {
-//
-//		// TODO add input validations
-//		foodTrucksMap.put(ft.getLocationId(), ft);
-//	}
+	@PostMapping("/insertFoodTruck")
+	public void insertFoodTruck(@RequestBody FoodTruck ft) {
+		log.info(String.format("Attempting to insert FoodTruck: %s", ft));
+		if (ft != null && isFoodTruckValid(ft)) {
+			foodTrucksMap.put(ft.getLocationId(), ft);
+
+			String blockName = ft.getBlock().isEmpty() ? "EMPTY" : ft.getBlock();
+			List<FoodTruck> existingFtsByBlock = foodTrucksByBlockMap.getOrDefault(blockName, new ArrayList<>());
+			List<FoodTruck> ftsByBlockFiltered = new ArrayList<>();
+			// remove existing foodTruck by locationId before inserting to avoid duplicates
+			for (FoodTruck eft : existingFtsByBlock) {
+				if (!eft.getLocationId().equals(ft.getLocationId())) {
+					ftsByBlockFiltered.add(eft);
+				}
+			}
+			ftsByBlockFiltered.add(ft);
+			foodTrucksByBlockMap.put(blockName, ftsByBlockFiltered);
+		}
+
+	}
 
 	@Bean
 	public static Map<String, FoodTruck> intializeFoodTrucks() {
@@ -80,5 +99,23 @@ public class FoodTruckController {
 			foodTrucksByBlockMap.put(blockName, ftsByBlock);
 		}
 		return foodTrucksByBlockMap;
+	}
+
+	private static boolean isFoodTruckValid(FoodTruck ft) {
+		// TODO: add more input validations
+		if (ft == null)
+			return false;
+
+		boolean hasLocationId = !ft.getLocationId().isEmpty();
+		boolean hasLocation = !ft.getLocation().isEmpty();
+		boolean hasApplicant = !ft.getApplicant().isEmpty();
+		boolean hasAddress = !ft.getAddress().isEmpty();
+		boolean hasPermit = !ft.getPermit().isEmpty();
+		boolean hasSchedule = !ft.getSchedule().isEmpty();
+		boolean hasReceivedDate = !ft.getReceived().isEmpty();
+		boolean hasPriorPermitData = !ft.getPriorPermit().isEmpty();
+
+		return hasLocationId && hasLocation && hasApplicant && hasAddress 
+				&& hasPermit && hasSchedule && hasReceivedDate && hasPriorPermitData;
 	}
 }
