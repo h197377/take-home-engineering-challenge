@@ -11,7 +11,7 @@ public class FoodTruck {
 	private String block;
 	private String lot;
 	private String permit;
-	private String Status;
+	private String status;
 	private String foodItems;
 	private String x;
 	private String y;
@@ -19,12 +19,46 @@ public class FoodTruck {
 	private String longitude;
 	private String schedule;
 	private String daysHours;
-	private String NOISent;
+	private String noiSent;
 	private String approved;
 	private String received;
 	private String priorPermit;
 	private String expirationDate;
 	private String location;
+
+	public FoodTruck(String locationId, String applicant, String facilityType, String cnn, String locationDescription,
+			String address, String blockLot, String block, String lot, String permit, String status, String foodItems,
+			String x, String y, String latitude, String longitude, String schedule, String daysHours, String noiSent,
+			String approved, String received, String priorPermit, String expirationDate, String location) {
+		this.locationId = locationId;
+		this.applicant = applicant;
+		this.facilityType = facilityType;
+		this.cnn = cnn;
+		this.locationDescription = locationDescription;
+		this.address = address;
+		this.blockLot = blockLot;
+		this.block = block;
+		this.lot = lot;
+		this.permit = permit;
+		this.status = status;
+		this.foodItems = foodItems;
+		this.x = x;
+		this.y = y;
+		this.latitude = latitude;
+		this.longitude = longitude;
+		this.schedule = schedule;
+		this.daysHours = daysHours;
+		this.noiSent = noiSent;
+		this.approved = approved;
+		this.received = received;
+		this.priorPermit = priorPermit;
+		this.expirationDate = expirationDate;
+		this.location = location;
+	}
+	
+	public FoodTruck() {
+		
+	}
 
 	public String getLocationId() {
 		return locationId;
@@ -107,11 +141,11 @@ public class FoodTruck {
 	}
 
 	public String getStatus() {
-		return Status;
+		return status;
 	}
 
 	public void setStatus(String status) {
-		Status = status;
+		this.status = status;
 	}
 
 	public String getFoodItems() {
@@ -170,12 +204,12 @@ public class FoodTruck {
 		this.daysHours = daysHours;
 	}
 
-	public String getNOISent() {
-		return NOISent;
+	public String getNoiSent() {
+		return noiSent;
 	}
 
-	public void setNOISent(String nOISent) {
-		NOISent = nOISent;
+	public void setNOISent(String noiSent) {
+		this.noiSent = noiSent;
 	}
 
 	public String getApproved() {
