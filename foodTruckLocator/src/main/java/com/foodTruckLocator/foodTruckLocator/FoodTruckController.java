@@ -45,7 +45,7 @@ public class FoodTruckController {
 		if (ft != null && isFoodTruckValid(ft)) {
 			foodTrucksMap.put(ft.getLocationId(), ft);
 
-			String blockName = ft.getBlock().isEmpty() ? "EMPTY" : ft.getBlock();
+			String blockName = ft.getBlock() != null && ft.getBlock().isEmpty() ? "EMPTY" : ft.getBlock();
 			List<FoodTruck> existingFtsByBlock = foodTrucksByBlockMap.getOrDefault(blockName, new ArrayList<>());
 			List<FoodTruck> ftsByBlockFiltered = new ArrayList<>();
 			// remove existing foodTruck by locationId before inserting to avoid duplicates
@@ -106,14 +106,14 @@ public class FoodTruckController {
 		if (ft == null)
 			return false;
 
-		boolean hasLocationId = !ft.getLocationId().isEmpty();
-		boolean hasLocation = !ft.getLocation().isEmpty();
-		boolean hasApplicant = !ft.getApplicant().isEmpty();
-		boolean hasAddress = !ft.getAddress().isEmpty();
-		boolean hasPermit = !ft.getPermit().isEmpty();
-		boolean hasSchedule = !ft.getSchedule().isEmpty();
-		boolean hasReceivedDate = !ft.getReceived().isEmpty();
-		boolean hasPriorPermitData = !ft.getPriorPermit().isEmpty();
+		boolean hasLocationId = ft.getLocationId() != null && !ft.getLocationId().isEmpty();
+		boolean hasLocation = ft.getLocation() != null && !ft.getLocation().isEmpty();
+		boolean hasApplicant = ft.getApplicant() != null && !ft.getApplicant().isEmpty();
+		boolean hasAddress = ft.getAddress() != null && !ft.getAddress().isEmpty();
+		boolean hasPermit = ft.getPermit() != null && !ft.getPermit().isEmpty();
+		boolean hasSchedule = ft.getSchedule() != null && !ft.getSchedule().isEmpty();
+		boolean hasReceivedDate = ft.getReceived() != null && !ft.getReceived().isEmpty();
+		boolean hasPriorPermitData = ft.getPriorPermit() != null && !ft.getPriorPermit().isEmpty();
 
 		return hasLocationId && hasLocation && hasApplicant && hasAddress 
 				&& hasPermit && hasSchedule && hasReceivedDate && hasPriorPermitData;

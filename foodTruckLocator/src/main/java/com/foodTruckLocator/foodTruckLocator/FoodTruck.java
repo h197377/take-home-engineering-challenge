@@ -254,8 +254,8 @@ public class FoodTruck {
 
 	@Override
 	public String toString() {
-		return String.format("FoodTruck \nLocationId: %s \nBlock: %s \nAddress: %s", this.locationId, this.block,
-				this.address);
+		return String.format("FoodTruck \nLocationId: %s \nBlock: %s \nAddress: %s", 
+				this.locationId, this.block, this.address);
 	}
 
 }
